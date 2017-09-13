@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "nightlight",
+  "description": "Inverted display mode for bright monitors at night",
+  "version": "1.0",
+  "author": "dev@conceptualspace.net",
+
+  "background": { "scripts": ["background.js"] },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Toggle night mode"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab", "tabs", "http://*/*", "https://*/*"
+  ]
+}
