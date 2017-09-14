@@ -7,15 +7,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 var css = null;
-var initialBackgroundColor = null;
+var initialBackgroundColor = document.body.style.backgroundColor || "initial";
 
 function invert(status) {
     if (status === "enabled") {
-        css = 'html {filter: invert(90%);} img {filter: invert(90%); }';
-        initialBackgroundColor = document.body.style.backgroundColor || "initial";
+        css = 'html {filter: invert(90%) hue-rotate(180deg);} img {filter: invert(90%) hue-rotate(180deg); }';
         document.body.style.backgroundColor = "rgba(0,0,0,0.9)";
     } else {
-        var css ='html {filter: invert(0%); } img {filter: invert(0%); }';
+        var css ='html {filter: invert(0%) hue-rotate(0deg); } img {filter: invert(0%); }';
         document.body.style.backgroundColor = initialBackgroundColor;
     }
 
