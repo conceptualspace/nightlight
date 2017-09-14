@@ -3,7 +3,7 @@
 
   "name": "nightlight",
   "description": "Inverted display mode for bright monitors at night",
-  "version": "1.0",
+  "version": "1.3",
   "author": "dev@conceptualspace.net",
 
   "background": { "scripts": ["background.js"] },

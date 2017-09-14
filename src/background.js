@@ -1,3 +1,8 @@
+// web extensions polyfill for ff/chrome
+window.browser = (function () {
+    return window.browser || window.chrome;
+})();
+
 var status = "disabled";
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message === "isEnabled")
@@ -6,19 +11,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 chrome.browserAction.onClicked.addListener(function() {
 
-    chrome.tabs.query({}, function(tabs) {
+    browser.tabs.query({}, function(tabs) {
         var message = {response: status};
         for (var i=0; i<tabs.length; ++i) {
-            chrome.tabs.sendMessage(tabs[i].id, message);
+            browser.tabs.sendMessage(tabs[i].id, message);
         }
     });
 
     if (status === "enabled") {
-        chrome.browserAction.setIcon({path: "icon" + 1 + ".png"});
-        status = "disabled"
+        if (chrome.browserAction.setIcon) {
+            chrome.browserAction.setIcon({path: "icon" + 1 + ".png"});
+        }
+        status = "disabled";
     } else {
-        chrome.browserAction.setIcon({path: "icon" + 2 + ".png"});
-        status = "enabled"
+        if (chrome.browserAction.setIcon) {
+            chrome.browserAction.setIcon({path: "icon" + 2 + ".png"});
+        }
+        status = "enabled";
     }
 
 });
