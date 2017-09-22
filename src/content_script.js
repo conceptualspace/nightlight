@@ -6,18 +6,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     invert(request.response);
 });
 
-var bgBlack = document.documentElement.style.backgroundColor || 'black';
-var bgWhite = document.documentElement.style.backgroundColor || 'white';
-
 function invert(status) {
+    let css = null;
+    let bg = null;
+
     if (status === "enabled") {
-        document.documentElement.style.backgroundColor = bgBlack;
-        document.documentElement.style.filter = "hue-rotate(180deg) invert(100%)";
-        //document.body.style.backgroundColor = "white";
-        //document.body.style.backgroundColor = "rgba(0,0,0,0.9)";
+        css = 'html {filter: invert(90%) hue-rotate(180deg);} ' +
+            'img, canvas, embed, object, video, [style*="url"] {filter: hue-rotate(180deg) invert();}';
+        bg = '#000000';
+
     } else {
-        document.documentElement.style.backgroundColor = bgWhite;
-        document.documentElement.style.filter = "hue-rotate(0deg) invert(0%)";
-        //document.body.style.backgroundColor = initialBackgroundColor;
+        css ='html, img {filter: none; } ';
+        bg = 'initial';
     }
+
+    // set the background immediately
+    document.documentElement.style.backgroundColor = bg;
+
+    let head = document.getElementsByTagName('head')[0];
+    let style = document.createElement('style');
+
+    style.type = 'text/css';
+    if (style.styleSheet){
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(style);
 }

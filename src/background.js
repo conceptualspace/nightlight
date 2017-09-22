@@ -4,6 +4,7 @@ window.browser = (function () {
 })();
 
 var status = "disabled";
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message === "isEnabled")
         sendResponse({response: status});
