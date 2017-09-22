@@ -5,12 +5,12 @@ window.browser = (function () {
 
 var status = "disabled";
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message === "isEnabled")
         sendResponse({response: status});
 });
 
-chrome.browserAction.onClicked.addListener(function() {
+browser.browserAction.onClicked.addListener(function() {
 
     browser.tabs.query({}, function(tabs) {
         var message = {response: status};
@@ -20,13 +20,13 @@ chrome.browserAction.onClicked.addListener(function() {
     });
 
     if (status === "enabled") {
-        if (chrome.browserAction.setIcon) {
-            chrome.browserAction.setIcon({path: "icon" + 1 + ".png"});
+        if (browser.browserAction.setIcon) {
+            browser.browserAction.setIcon({path: "icon" + 1 + ".png"});
         }
         status = "disabled";
     } else {
-        if (chrome.browserAction.setIcon) {
-            chrome.browserAction.setIcon({path: "icon" + 2 + ".png"});
+        if (browser.browserAction.setIcon) {
+            browser.browserAction.setIcon({path: "icon" + 2 + ".png"});
         }
         status = "enabled";
     }

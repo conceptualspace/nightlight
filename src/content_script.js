@@ -1,8 +1,13 @@
-chrome.runtime.sendMessage({message: "isEnabled"}, function(response) {
+// web extensions polyfill for ff/chrome
+window.browser = (function () {
+    return window.browser || window.chrome;
+})();
+
+browser.runtime.sendMessage({message: "isEnabled"}, function(response) {
     invert(response.response);
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     invert(request.response);
 });
 
