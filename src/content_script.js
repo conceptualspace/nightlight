@@ -21,7 +21,7 @@ function invert(status) {
         bg = '#000000';
 
     } else {
-        css ='html, img {filter: none; } ';
+        css ='html, img, canvas, embed, object, video, [style*="url"] {filter: none; } ';
         bg = 'initial';
     }
 
