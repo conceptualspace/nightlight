@@ -3,7 +3,7 @@ window.browser = (function () {
     return window.browser || window.chrome;
 })();
 
-var status = "disabled";
+let status = "disabled";
 
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message === "isEnabled")
@@ -13,8 +13,8 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 browser.browserAction.onClicked.addListener(function() {
 
     browser.tabs.query({}, function(tabs) {
-        var message = {response: status};
-        for (var i=0; i<tabs.length; ++i) {
+        let message = {response: status};
+        for (let i=0; i<tabs.length; ++i) {
             browser.tabs.sendMessage(tabs[i].id, message);
         }
     });

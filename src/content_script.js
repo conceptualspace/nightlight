@@ -38,4 +38,29 @@ function invert(status) {
         style.appendChild(document.createTextNode(css));
     }
     head.appendChild(style);
+
+    confirmInvert()
+}
+
+function confirmInvert() {
+    // white text probably means we already had a dark background, so undo the inversion
+    let textColor = window.getComputedStyle(document.body).color.match(/\d+/g);
+
+    if ((textColor[0] > 200) && (textColor[1] > 200) && (textColor[2] > 200)) {
+
+        let css ='html, img, canvas, embed, object, video, [style*="url"] {filter: none; } ';
+
+        document.documentElement.style.backgroundColor = 'initial';
+
+        let head = document.getElementsByTagName('head')[0];
+        let style = document.createElement('style');
+
+        style.type = 'text/css';
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+    }
 }
