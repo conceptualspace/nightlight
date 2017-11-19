@@ -14,10 +14,12 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function invert(status) {
     let css = null;
     let bg = null;
+    let imgcss = null;
+    let style = null;
 
     if (status === "enabled") {
-        css = 'html {filter: invert(90%) hue-rotate(180deg);} ' +
-            'img, canvas, embed, object, video, [style*="url"] {filter: hue-rotate(180deg) invert();}';
+        css = 'html {filter: invert(90%) hue-rotate(180deg);}';
+        imgcss = 'img, iframe, canvas, embed, object, video, [style*="url"] {filter: invert(90%) hue-rotate(180deg); }';
         bg = '#000000';
 
     } else {
@@ -28,16 +30,16 @@ function invert(status) {
     // set the background immediately
     document.documentElement.style.backgroundColor = bg;
 
-    let head = document.getElementsByTagName('head')[0];
-    let style = document.createElement('style');
-
-    style.type = 'text/css';
-    if (style.styleSheet){
-        style.styleSheet.cssText = css;
+    // update
+    if (style) {
+        style.sheet.cssRules[0].style.cssText = css;
     } else {
-        style.appendChild(document.createTextNode(css));
+        style = document.createElement('style');
+        style.appendChild(document.createTextNode(''));
+        document.documentElement.appendChild(style);
+        style.sheet.insertRule(css, style.sheet.cssRules.length);
+        style.sheet.insertRule(imgcss, style.sheet.cssRules.length);
     }
-    head.appendChild(style);
 
     confirmInvert()
 }
@@ -47,20 +49,13 @@ function confirmInvert() {
     let textColor = window.getComputedStyle(document.body).color.match(/\d+/g);
 
     if ((textColor[0] > 200) && (textColor[1] > 200) && (textColor[2] > 200)) {
-
         let css ='html, img, canvas, embed, object, video, [style*="url"] {filter: none; } ';
 
         document.documentElement.style.backgroundColor = 'initial';
 
-        let head = document.getElementsByTagName('head')[0];
-        let style = document.createElement('style');
-
-        style.type = 'text/css';
-        if (style.styleSheet){
-            style.styleSheet.cssText = css;
-        } else {
-            style.appendChild(document.createTextNode(css));
-        }
-        head.appendChild(style);
+        style = document.createElement('style');
+        style.appendChild(document.createTextNode(''));
+        document.documentElement.appendChild(style);
+        style.sheet.insertRule(css, style.sheet.cssRules.length);
     }
 }
