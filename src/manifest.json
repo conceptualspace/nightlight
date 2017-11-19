@@ -3,7 +3,7 @@
 
   "name": "nightlight",
   "description": "Inverted display mode for less eye strain in dark or dim lighting",
-  "version": "1.6",
+  "version": "1.7",
   "author": "dev@conceptualspace.net",
 
   "background": { "scripts": ["background.js"] },
