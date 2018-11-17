@@ -11,37 +11,47 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     invert(request.response);
 });
 
+
+
 function invert(status) {
-    let css = null;
-    let bg = null;
-    let imgcss = null;
-    let style = null;
 
-    if (status === "enabled") {
-        css = 'html {filter: invert(90%) hue-rotate(180deg);}';
-        imgcss = 'img, iframe, canvas, embed, object, video, [style*="url"] {filter: invert(90%) hue-rotate(180deg); }';
-        bg = '#000000';
+    // todo: add context menu to whitelist site
+    browser.storage.local.get('whitelist', function(result) {
+        if (result.whitelist.includes(location.hostname)) {
+            return
+        }
 
-    } else {
-        css ='html, img, canvas, embed, object, video, [style*="url"] {filter: none; } ';
-        bg = 'initial';
-    }
+        let css = null;
+        let bg = null;
+        let imgcss = null;
+        let style = null;
 
-    // set the background immediately
-    document.documentElement.style.backgroundColor = bg;
+        if (status === "enabled") {
+            css = 'html {filter: invert(90%) hue-rotate(180deg);}';
+            imgcss = 'html img, canvas, embed, object, video {filter: invert(90%) hue-rotate(180deg); }';
+            bg = '#000000';
+        } else {
+            css ='html, html img, canvas, embed, object, video, [style*="url"] {filter: none; } ';
+            bg = 'initial';
+        }
 
-    // update
-    if (style) {
-        style.sheet.cssRules[0].style.cssText = css;
-    } else {
-        style = document.createElement('style');
-        style.appendChild(document.createTextNode(''));
-        document.documentElement.appendChild(style);
-        style.sheet.insertRule(css, style.sheet.cssRules.length);
-        style.sheet.insertRule(imgcss, style.sheet.cssRules.length);
-    }
+        // set the background immediately
+        document.documentElement.style.backgroundColor = bg;
 
-    confirmInvert()
+        // update
+        if (style) {
+            style.sheet.cssRules[0].style.cssText = css;
+        } else {
+            style = document.createElement('style');
+            style.appendChild(document.createTextNode(''));
+            document.documentElement.appendChild(style);
+            style.sheet.insertRule(css, style.sheet.cssRules.length);
+            style.sheet.insertRule(imgcss, style.sheet.cssRules.length);
+        }
+
+        confirmInvert()
+    });
+
 }
 
 function confirmInvert() {
