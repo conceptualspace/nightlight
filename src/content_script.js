@@ -15,7 +15,6 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 function invert(status) {
 
-    // todo: add context menu to whitelist site
     browser.storage.local.get('whitelist', function(result) {
         if (result.whitelist.includes(location.hostname)) {
             return

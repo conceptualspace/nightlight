@@ -5,9 +5,31 @@ window.browser = (function () {
 
 let status = "disabled";
 
+browser.contextMenus.create({
+    id: "whitelist-site",
+    title: "Add site to whitelist",
+    contexts: ["browser_action", "page"]
+});
+
+browser.contextMenus.onClicked.addListener(function(info, tab) {
+    let message = {response: "disabled"};
+    browser.tabs.sendMessage(tab.id, message);
+
+    // delay saving to whitelist to make sure nightlight is disabled on the tab first
+    setTimeout(function() {
+        browser.storage.local.get('whitelist', function (result) {
+            let whitelist = result.whitelist;
+            let site = new URL(tab.url).hostname;
+            whitelist.push(site);
+            browser.storage.local.set({'whitelist': Array.from(new Set(whitelist))});
+        })
+    }, 500);
+});
+
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.message === "isEnabled")
+    if (request.message === "isEnabled") {
         sendResponse({response: status});
+    }
 });
 
 browser.browserAction.onClicked.addListener(function() {

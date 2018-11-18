@@ -37,7 +37,8 @@ function save_options() {
         }
     }
 
-    browser.storage.local.set({'whitelist': filteredWhitelist}, function() {
+    // remove duplicates and save to storage
+    browser.storage.local.set({'whitelist': Array.from(new Set(filteredWhitelist))}, function() {
         let status = document.getElementById('status');
         status.textContent = 'Options saved!';
 
