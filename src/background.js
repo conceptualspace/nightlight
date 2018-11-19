@@ -35,9 +35,12 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 browser.browserAction.onClicked.addListener(function() {
 
     browser.tabs.query({}, function(tabs) {
+
+        // bubble the active tab so it gets styled first; avoids potential delay with many tabs
+        let sortedTabs = _.sortBy(tabs, 'active').reverse();
         let message = {response: status};
         for (let i=0; i<tabs.length; ++i) {
-            browser.tabs.sendMessage(tabs[i].id, message);
+            browser.tabs.sendMessage(sortedTabs[i].id, message);
         }
     });
 

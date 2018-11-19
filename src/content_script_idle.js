@@ -4,7 +4,14 @@ window.browser = (function () {
 })();
 
 browser.runtime.sendMessage({message: "isEnabled"}, function(response) {
-    invert(response.response);
+    if(response.response === "enabled") {
+        browser.storage.local.get('whitelist', function (result) {
+            if (result && result.whitelist.includes(location.hostname)) {
+                return;
+            }
+            confirmInvert()
+        });
+    }
 });
 
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -16,8 +23,8 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function invert(status) {
 
     browser.storage.local.get('whitelist', function(result) {
-        if (result.whitelist.includes(location.hostname)) {
-            return
+        if (result && result.whitelist.includes(location.hostname)) {
+            return;
         }
 
         let css = null;
@@ -45,7 +52,9 @@ function invert(status) {
             style.appendChild(document.createTextNode(''));
             document.documentElement.appendChild(style);
             style.sheet.insertRule(css, style.sheet.cssRules.length);
-            style.sheet.insertRule(imgcss, style.sheet.cssRules.length);
+            if (imgcss) {
+                style.sheet.insertRule(imgcss, style.sheet.cssRules.length);
+            }
         }
 
         confirmInvert()
@@ -62,7 +71,7 @@ function confirmInvert() {
 
         document.documentElement.style.backgroundColor = 'initial';
 
-        style = document.createElement('style');
+        let style = document.createElement('style');
         style.appendChild(document.createTextNode(''));
         document.documentElement.appendChild(style);
         style.sheet.insertRule(css, style.sheet.cssRules.length);
