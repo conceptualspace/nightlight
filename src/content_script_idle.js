@@ -6,7 +6,7 @@ window.browser = (function () {
 browser.runtime.sendMessage({message: "isEnabled"}, function(response) {
     if(response.response === "enabled") {
         browser.storage.local.get('whitelist', function (result) {
-            if (result && result.whitelist.includes(location.hostname)) {
+            if (result.whitelist.includes(location.hostname)) {
                 return;
             }
             confirmInvert()
@@ -18,12 +18,10 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     invert(request.response);
 });
 
-
-
 function invert(status) {
 
     browser.storage.local.get('whitelist', function(result) {
-        if (result && result.whitelist.includes(location.hostname)) {
+        if (result.whitelist.includes(location.hostname)) {
             return;
         }
 

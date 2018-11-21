@@ -3,6 +3,13 @@ window.browser = (function () {
     return window.browser || window.chrome;
 })();
 
+// initialize storage
+browser.runtime.onInstalled.addListener(function() {
+    browser.storage.local.get('whitelist', function (result) {
+        if (!result.hasOwnProperty('whitelist')) { browser.storage.local.set({'whitelist': []}) }
+    });
+});
+
 let status = "disabled";
 
 browser.contextMenus.create({
