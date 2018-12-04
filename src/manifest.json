@@ -3,8 +3,13 @@
 
   "name": "night light",
   "description": "Inverted display mode for less eye strain in dark or dim lighting",
-  "version": "1.13",
+  "version": "1.14",
   "author": "dev@conceptualspace.net",
+  "applications": {
+    "gecko": {
+      "id": "{d8a39bf7-9f46-45b7-9d77-7754cd13c0f8}"
+    }
+  },
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
